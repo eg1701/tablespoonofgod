@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>A Tablespoon of God — Daily Bible Verses</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --cream:    #eef5fb;
+      --parchment:#ddeaf6;
+      --gold:     #2a7abf;
+      --gold-light:#5ba3d9;
+      --brown:    #174b7a;
+      --brown-dark:#0d2e4f;
+      --text:     #0e2033;
+      --muted:    #5a7fa0;
+      --white:    #ffffff;
+      --shadow:   rgba(30,80,130,0.15);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--cream);
+      color: var(--text);
+      font-family: 'Lato', sans-serif;
+      font-size: 16px;
+      line-height: 1.7;
+    }
+
+    header {
+      background: linear-gradient(135deg, var(--brown-dark) 0%, var(--brown) 60%, #2565a0 100%);
+      color: var(--cream);
+      text-align: center;
+      padding: 3rem 1.5rem 2.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+    header::before {
+      content: '';
+      position: absolute; inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+
+    header > * {
+      position: relative;
+      z-index: 1;
+    }
+    .header-cross { font-size: 2.5rem; margin-bottom: 0.5rem; opacity: 0.85; }
+    header h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      line-height: 1.2;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    }
+    header h1 span { color: var(--gold-light); }
+    header p.tagline {
+      margin-top: 0.7rem;
+      font-size: 1.05rem;
+      font-weight: 300;
+      letter-spacing: 0.06em;
+      opacity: 0.85;
+    }
+    nav {
+      margin-top: 1.8rem;
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    nav a {
+      background: transparent;
+      border: 1px solid rgba(91,163,217,0.45);
+      color: var(--gold-light);
+      font-family: 'Lato', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.4rem 1.2rem;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+      text-decoration: none;
+      display: inline-block;
+    }
+    nav a:hover {
+      background: var(--gold);
+      color: var(--white);
+      border-color: var(--gold);
+    }
+
+    .container { max-width: 900px; margin: 0 auto; padding: 0 1.5rem; }
+
+    .date-strip {
+      background: var(--parchment);
+      border-bottom: 1px solid rgba(42,122,191,0.3);
+      text-align: center;
+      padding: 0.75rem 1rem;
+      font-size: 0.9rem;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .date-strip span { color: var(--gold); font-weight: 700; }
+
+    section { scroll-margin-top: 1rem; }
+
+    #today { padding: 3rem 1.5rem; }
+    .verse-card {
+      background: var(--white);
+      border-radius: 16px;
+      box-shadow: 0 6px 36px var(--shadow);
+      overflow: hidden;
+      border-top: 5px solid var(--gold);
+    }
+    .verse-card-header {
+      background: linear-gradient(to right, var(--parchment), #f0f7ff);
+      padding: 1.4rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      border-bottom: 1px solid rgba(42,122,191,0.2);
+    }
+    .topic-badge {
+      background: var(--gold);
+      color: var(--white);
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 0.3rem 1rem;
+      border-radius: 50px;
+    }
+    .daily-label { font-size: 0.85rem; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; }
+    .verse-body { padding: 2rem 2rem 1.5rem; }
+    .verse-text {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.25rem, 3vw, 1.65rem);
+      font-style: italic;
+      color: var(--brown-dark);
+      line-height: 1.6;
+      border-left: 4px solid var(--gold-light);
+      padding-left: 1.4rem;
+      margin-bottom: 1rem;
+    }
+    .verse-ref { font-size: 0.92rem; font-weight: 700; color: var(--gold); letter-spacing: 0.06em; margin-bottom: 1.8rem; }
+    .thought-box {
+      background: linear-gradient(135deg, #f0f7ff, #e6f2ff);
+      border-radius: 10px;
+      padding: 1.4rem 1.6rem;
+      border: 1px solid rgba(42,122,191,0.25);
+    }
+    .thought-box h3 { font-size: 0.82rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.6rem; }
+    .thought-box p { font-size: 1rem; color: var(--text); line-height: 1.75; }
+    .verse-card-footer { padding: 1rem 2rem 1.4rem; text-align: right; font-size: 0.82rem; color: var(--muted); }
+
+    .share-row { display: flex; gap: 0.7rem; justify-content: center; padding: 0 1.5rem 2.5rem; flex-wrap: wrap; }
+    .share-btn {
+      background: transparent;
+      border: 1.5px solid var(--gold);
+      color: var(--brown);
+      font-size: 0.83rem;
+      font-weight: 700;
+      letter-spacing: 0.07em;
+      padding: 0.45rem 1.3rem;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: 'Lato', sans-serif;
+    }
+    .share-btn:hover { background: var(--gold); color: var(--white); }
+
+    .section-title { text-align: center; padding: 1rem 0 0.5rem; }
+    .section-title h2 { font-family: 'Playfair Display', serif; font-size: clamp(1.5rem, 4vw, 2.1rem); color: var(--brown-dark); margin-bottom: 0.4rem; }
+    .section-title p { font-size: 0.95rem; color: var(--muted); }
+    .divider { width: 60px; height: 3px; background: var(--gold); border-radius: 2px; margin: 0.8rem auto 2rem; }
+
+    #signup {
+      background: linear-gradient(135deg, var(--brown-dark), var(--brown));
+      padding: 4rem 1.5rem;
+      text-align: center;
+      color: var(--cream);
+    }
+    #signup h2 { font-family: 'Playfair Display', serif; font-size: clamp(1.5rem, 4vw, 2.1rem); margin-bottom: 0.5rem; }
+    #signup p { font-size: 1rem; opacity: 0.8; max-width: 480px; margin: 0 auto 1.8rem; line-height: 1.65; }
+    .signup-form { display: flex; gap: 0.7rem; max-width: 480px; margin: 0 auto; flex-wrap: wrap; justify-content: center; }
+    .signup-form input[type="text"],
+    .signup-form input[type="email"] {
+      flex: 1; min-width: 200px; padding: 0.8rem 1.2rem;
+      border-radius: 8px; border: 2px solid transparent;
+      font-size: 0.95rem; font-family: 'Lato', sans-serif; outline: none; transition: border-color 0.2s;
+    }
+    .signup-form input:focus { border-color: var(--gold-light); }
+    .signup-form button {
+      background: var(--gold); color: var(--white); border: none;
+      padding: 0.8rem 1.8rem; border-radius: 8px; font-size: 0.95rem;
+      font-weight: 700; font-family: 'Lato', sans-serif; cursor: pointer;
+      letter-spacing: 0.05em; transition: background 0.2s, transform 0.1s; white-space: nowrap;
+    }
+    .signup-form button:hover { background: var(--gold-light); transform: translateY(-1px); }
+    .signup-confirm { display: none; margin-top: 1.2rem; color: var(--gold-light); font-size: 1rem; font-weight: 700; }
+    .signup-note { margin-top: 1rem; font-size: 0.8rem; opacity: 0.55; }
+
+    #archive { padding: 3.5rem 1.5rem; background: var(--parchment); }
+    .archive-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.4rem; margin-top: 0.5rem; }
+    .archive-card {
+      background: var(--white); border-radius: 12px; box-shadow: 0 3px 16px var(--shadow);
+      padding: 1.4rem 1.5rem; border-top: 3px solid var(--gold-light);
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .archive-card:hover { transform: translateY(-3px); box-shadow: 0 8px 28px var(--shadow); }
+    .archive-date { font-size: 0.75rem; font-weight: 700; color: var(--gold); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.3rem; }
+    .archive-topic { display: inline-block; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; background: var(--parchment); color: var(--brown); padding: 0.15rem 0.7rem; border-radius: 50px; margin-bottom: 0.7rem; }
+    .archive-verse { font-family: 'Playfair Display', serif; font-style: italic; font-size: 0.97rem; color: var(--brown-dark); line-height: 1.6; margin-bottom: 0.5rem; }
+    .archive-ref { font-size: 0.8rem; font-weight: 700; color: var(--muted); }
+    .archive-expand { margin-top: 0.8rem; font-size: 0.85rem; color: var(--gold); cursor: pointer; font-weight: 700; border: none; background: none; padding: 0; font-family: 'Lato', sans-serif; }
+    .archive-expand:hover { text-decoration: underline; }
+    .archive-thought { display: none; margin-top: 0.8rem; font-size: 0.88rem; color: var(--text); line-height: 1.7; background: #f0f6fc; border-radius: 7px; padding: 0.8rem 1rem; border-left: 3px solid var(--gold-light); }
+
+    footer { background: var(--brown-dark); color: var(--cream); text-align: center; padding: 2.5rem 1.5rem; font-size: 0.88rem; }
+    footer .footer-cross { font-size: 1.8rem; margin-bottom: 0.8rem; opacity: 0.6; }
+    footer p { margin-top: 0.4rem; opacity: 0.7; }
+
+    @media (max-width: 600px) {
+      .verse-body, .verse-card-header, .verse-card-footer { padding-left: 1.2rem; padding-right: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-cross">✝</div>
+  <h1>A <span>Tablespoon</span> of God</h1>
+  <p class="tagline">Your Daily Dose of God's Word — Simple. Practical. Life-Giving.</p>
+  <nav aria-label="Page sections">
+    <a href="#today" data-target="today">Today's Verse</a>
+    <a href="#signup" data-target="signup">Get Daily Emails</a>
+    <a href="#archive" data-target="archive">Past Verses</a>
+  </nav>
+</header>
+
+<div class="date-strip" id="dateStrip">Loading today's date…</div>
+
+<section id="today">
+  <div class="container">
+    <div class="section-title">
+      <h2>Today's Verse</h2>
+      <p>One scripture. One thought. One tablespoon of God for your day.</p>
+      <div class="divider"></div>
+    </div>
+    <div class="verse-card">
+      <div class="verse-card-header">
+        <span class="topic-badge" id="todayTopic">—</span>
+        <span class="daily-label">✦ Daily Scripture ✦</span>
+      </div>
+      <div class="verse-body">
+        <p class="verse-text" id="todayVerse">Loading…</p>
+        <p class="verse-ref"  id="todayRef"></p>
+        <div class="thought-box">
+          <h3>✦ A Thought for Your Day</h3>
+          <p id="todayThought">Loading…</p>
+        </div>
+      </div>
+      <div class="verse-card-footer" id="todayFooter"></div>
+    </div>
+  </div>
+</section>
+
+<div class="share-row container">
+  <button class="share-btn" id="shareCopy">📋 Copy Verse</button>
+  <button class="share-btn" id="shareX">✕ Share on X</button>
+  <button class="share-btn" id="shareFacebook">f Share on Facebook</button>
+</div>
+
+<section id="signup">
+  <div class="container">
+    <h2>✉ Receive Your Daily Tablespoon</h2>
+    <p>Sign up and we'll send today's verse and thought directly to your inbox — every morning, free.</p>
+    <form class="signup-form" onsubmit="handleSignup(event)">
+      <input type="text"  id="signupName"  placeholder="Your first name"   autocomplete="given-name" required />
+      <input type="email" id="signupEmail" placeholder="Your email address" autocomplete="email"      required />
+      <button type="submit">Subscribe Free</button>
+    </form>
+    <p class="signup-confirm" id="signupConfirm"></p>
+    <p class="signup-note">No spam, ever. Unsubscribe anytime. We honor your inbox.</p>
+  </div>
+</section>
+
+<section id="archive">
+  <div class="container">
+    <div class="section-title">
+      <h2>Past Daily Verses</h2>
+      <p>Revisit the scriptures from recent days and let them speak again.</p>
+      <div class="divider"></div>
+    </div>
+    <div class="archive-grid" id="archiveGrid"></div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-cross">✝</div>
+  <strong>tablespoonofgod.com</strong>
+  <p>All scripture taken from the Holy Bible, New International Version® (NIV®)</p>
+  <p>© <span id="footerYear"></span> A Tablespoon of God · Made with faith and love</p>
+</footer>
+
+<script>
+// VERSE DATABASE
+var VERSES = {
+  healing: [
+    { text: "He heals the brokenhearted and binds up their wounds.", ref: "Psalm 147:3 (NIV)", thought: "Whatever is broken inside you today — a relationship, a dream, your confidence — God is not put off by the pieces. Hand them to Him. He specializes in putting things back together, better than before." },
+    { text: "But I will restore you to health and heal your wounds, declares the Lord.", ref: "Jeremiah 30:17 (NIV)", thought: "This is God speaking directly — not maybe, not if you're good enough. He declares it. Today, let that promise be louder than the pain you're carrying." },
+    { text: "By his wounds we are healed.", ref: "Isaiah 53:5b (NIV)", thought: "Healing didn't come cheap. Jesus paid for yours with His own suffering. When you feel unworthy to ask for healing, remember — it's already been purchased for you." }
+  ],
+  fear: [
+    { text: "For God has not given us a spirit of fear, but of power and of love and of a sound mind.", ref: "2 Timothy 1:7 (NIV)", thought: "That anxious, fearful feeling? It did not come from God. He gave you power to face hard things, love to connect with others, and a clear mind to think well. Walk in that today." },
+    { text: "The Lord is my light and my salvation — whom shall I fear? The Lord is the stronghold of my life — of whom shall I be afraid?", ref: "Psalm 27:1 (NIV)", thought: "Ask yourself what you're most afraid of right now. Then ask: is that thing bigger than God? The answer is always no. Let His light shine on that fear today." },
+    { text: "Do not fear, for I am with you; do not be dismayed, for I am your God. I will strengthen you and help you.", ref: "Isaiah 41:10 (NIV)", thought: "God doesn't say 'don't be afraid' without backing it up. He immediately tells you why: I am with you. I am your God. I will help you. He's not asking you to be brave alone." }
+  ],
+  temptation: [
+    { text: "No temptation has overtaken you except what is common to mankind. And God is faithful; he will not let you be tempted beyond what you can bear.", ref: "1 Corinthians 10:13 (NIV)", thought: "You are not uniquely weak — everyone faces what you're facing. And God has already built a way out. Before you give in, look for that exit. He put it there for you." },
+    { text: "Submit yourselves, then, to God. Resist the devil, and he will flee from you.", ref: "James 4:7 (NIV)", thought: "Resistance starts with surrender. The strength to say no to temptation comes from saying yes to God first. Start your morning with Him, and you'll face the day from a different position." },
+    { text: "Because he himself suffered when he was tempted, he is able to help those who are being tempted.", ref: "Hebrews 2:18 (NIV)", thought: "Jesus was tempted too — and He understands exactly how hard it is. When you're struggling, you can go to Him not with shame but with honesty. He gets it. He's ready to help." }
+  ],
+  doubt: [
+    { text: "If any of you lacks wisdom, you should ask God, who gives generously to all without finding fault, and it will be given to you.", ref: "James 1:5 (NIV)", thought: "Doubt often lives where clarity is missing. If you don't know what to do or what to believe, just ask God — honestly, plainly, like you're texting a trusted friend. He won't make you feel foolish for asking." },
+    { text: "Immediately the boy's father exclaimed: 'I do believe; help me overcome my unbelief!'", ref: "Mark 9:24 (NIV)", thought: "This might be the most honest prayer in the Bible. You don't have to pretend to have perfect faith. God can work with 'I believe, but I'm not sure.' Show up with what you have." },
+    { text: "Trust in the Lord with all your heart and lean not on your own understanding.", ref: "Proverbs 3:5 (NIV)", thought: "When things don't make sense, the temptation is to figure it all out on your own. Today, try loosening your grip on needing all the answers. Trust the One who holds the whole picture." }
+  ],
+  love: [
+    { text: "For God so loved the world that he gave his one and only Son, that whoever believes in him shall not perish but have eternal life.", ref: "John 3:16 (NIV)", thought: "You are included in the word 'world.' God's love for you was not casual — it cost Him everything. Today, live like someone truly loved." },
+    { text: "We love because he first loved us.", ref: "1 John 4:19 (NIV)", thought: "If you're struggling to love someone difficult today, start here: remember how God loved you first, before you had it together. Let that love flow through you toward others." },
+    { text: "Love is patient, love is kind. It does not envy, it does not boast, it is not proud.", ref: "1 Corinthians 13:4 (NIV)", thought: "Pick one word from this verse and apply it intentionally today — patient, kind, humble. Love is less a feeling and more a series of small, intentional choices. Make one today." }
+  ],
+  anxiety: [
+    { text: "Do not be anxious about anything, but in every situation, by prayer and petition, with thanksgiving, present your requests to God.", ref: "Philippians 4:6 (NIV)", thought: "When the anxiety rises today, redirect it. Turn the worry into a specific prayer. Trade the spiral for a conversation with God." },
+    { text: "Cast all your anxiety on him because he cares for you.", ref: "1 Peter 5:7 (NIV)", thought: "Think of whatever is weighing on you today. Now imagine physically handing it over — like setting down a heavy bag. God says: give it to me. He wants it." },
+    { text: "Come to me, all you who are weary and burdened, and I will give you rest.", ref: "Matthew 11:28 (NIV)", thought: "Jesus invites the tired people — not the put-together ones. If you're exhausted from trying to hold everything together, this is your invitation. You can stop white-knuckling today and just come." }
+  ],
+  anger: [
+    { text: "Everyone should be quick to listen, slow to speak and slow to become angry.", ref: "James 1:19 (NIV)", thought: "Before you respond to that frustrating message or person — pause. Breathe. Listen more than you speak. Anger rarely makes things better; a pause almost always does." },
+    { text: "'In your anger do not sin': Do not let the sun go down while you are still angry.", ref: "Ephesians 4:26 (NIV)", thought: "Anger itself isn't the sin — what you do with it is. Before today ends, don't let the sun set on an unresolved conflict. Make the call, say I'm sorry. Rest easier tonight." },
+    { text: "A gentle answer turns away wrath, but a harsh word stirs up anger.", ref: "Proverbs 15:1 (NIV)", thought: "The next time someone comes at you heated, try responding gently — not weakly, but calmly. A soft answer has power. It can stop a whole storm in its tracks." }
+  ],
+  hope: [
+    { text: "For I know the plans I have for you, declares the Lord, plans to prosper you and not to harm you, plans to give you hope and a future.", ref: "Jeremiah 29:11 (NIV)", thought: "Even if today feels stuck, God says He has a plan with your name on it — and it ends well. You don't have to see the whole path. Just trust the One who laid it out." },
+    { text: "But those who hope in the Lord will renew their strength. They will soar on wings like eagles.", ref: "Isaiah 40:31 (NIV)", thought: "Tired? The kind of tired that sleep doesn't fix? Waiting on God isn't passive — it's filling back up. Let God recharge what's been drained today." },
+    { text: "May the God of hope fill you with all joy and peace as you trust in him, so that you may overflow with hope.", ref: "Romans 15:13 (NIV)", thought: "Hope isn't manufactured — it's filled in. Ask God today to fill you. Not just a trickle, but an overflow. He's generous with hope to those who simply ask and trust." }
+  ],
+  peace: [
+    { text: "Peace I leave with you; my peace I give you. I do not give to you as the world gives. Do not let your hearts be troubled and do not be afraid.", ref: "John 14:27 (NIV)", thought: "The world's peace depends on circumstances going well. Jesus's peace works even when they don't. Whatever is swirling around you today — choose the peace that transcends your situation." },
+    { text: "And the peace of God, which transcends all understanding, will guard your hearts and your minds in Christ Jesus.", ref: "Philippians 4:7 (NIV)", thought: "You don't have to understand everything to have peace. God's peace defies explanation — it's something you receive, not figure out. Lay down the need to understand today." },
+    { text: "You will keep in perfect peace those whose minds are steadfast, because they trust in you.", ref: "Isaiah 26:3 (NIV)", thought: "Peace begins in the mind. Whatever you fix your mind on shapes how you feel. Fix it on God, and peace follows." }
+  ],
+  stress: [
+    { text: "Cast your cares on the Lord and he will sustain you; he will never let the righteous be shaken.", ref: "Psalm 55:22 (NIV)", thought: "You were not designed to carry everything. Hand each stressful thing to God in prayer today. Carrying less is not weakness — it's wisdom." },
+    { text: "Humble yourselves, therefore, under God's mighty hand, that he may lift you up in due time.", ref: "1 Peter 5:6 (NIV)", thought: "A lot of stress comes from trying to control what we can't. Humility says: God, this is bigger than me. I trust you with it. Let Him carry the weight of outcomes today." },
+    { text: "Therefore I tell you, do not worry about your life, what you will eat or drink; or about your body, what you will wear.", ref: "Matthew 6:25 (NIV)", thought: "The same God who feeds the birds knows exactly what you need today. Don't let worry steal your peace over things He's already got covered." }
+  ],
+  patience: [
+    { text: "Wait for the Lord; be strong and take heart and wait for the Lord.", ref: "Psalm 27:14 (NIV)", thought: "Waiting is not wasting time. God's timing is never accidental. If something hasn't arrived yet, it's not because He forgot. Be strong. Keep waiting." },
+    { text: "Let us not become weary in doing good, for at the proper time we will reap a harvest if we do not give up.", ref: "Galatians 6:9 (NIV)", thought: "The harvest is coming. Don't stop now. Whatever good thing you've been quietly doing without seeing results — keep showing up. The proper time is real." },
+    { text: "Be still before the Lord and wait patiently for him; do not fret when people succeed in their ways.", ref: "Psalm 37:7 (NIV)", thought: "Stillness is a spiritual discipline. Try three quiet minutes with God today before the noise starts. See what happens." }
+  ],
+  pride: [
+    { text: "Pride goes before destruction, a haughty spirit before a fall.", ref: "Proverbs 16:18 (NIV)", thought: "Before you bulldoze ahead with your own way today, ask: is this God's plan or mine? Humility positions you for blessing; pride sets up a stumble." },
+    { text: "Do nothing out of selfish ambition or vain conceit. Rather, in humility value others above yourselves.", ref: "Philippians 2:3 (NIV)", thought: "Try an experiment today: in at least one conversation, put the other person first. Ask about them before talking about yourself. Practice looks like this." },
+    { text: "He guides the humble in what is right and teaches them his way.", ref: "Psalm 25:9 (NIV)", thought: "God bypasses the proud and goes straight to the humble. If you want His guidance today, position yourself low. Humble people are teachable — and teachable people get led well." }
+  ],
+  joy: [
+    { text: "Rejoice in the Lord always. I will say it again: Rejoice!", ref: "Philippians 4:4 (NIV)", thought: "Paul wrote this from prison. If he could say rejoice twice in chains, you can find something to be genuinely grateful for today. Joy isn't about circumstances — it's a decision made daily." },
+    { text: "The joy of the Lord is your strength.", ref: "Nehemiah 8:10b (NIV)", thought: "When you're feeling depleted, joy is the fuel. Not manufactured happiness — but the deep, stable gladness that comes from knowing whose you are. Come back to that truth today." },
+    { text: "You make known to me the path of life; you will fill me with joy in your presence.", ref: "Psalm 16:11 (NIV)", thought: "Joy is found in His presence, not in perfect circumstances. When you need a lift today, spend a few minutes genuinely with God. See what happens." }
+  ],
+  jealousy: [
+    { text: "A heart at peace gives life to the body, but envy rots the bones.", ref: "Proverbs 14:30 (NIV)", thought: "Jealousy hurts the person feeling it more than anyone else. When comparison creeps in today, redirect it. Ask God to help you celebrate others — and trust He hasn't forgotten you." },
+    { text: "Do not let your heart envy sinners, but always be zealous for the fear of the Lord.", ref: "Proverbs 23:17 (NIV)", thought: "It's easy to scroll and wish your life looked like someone else's. Stay in your lane. God's plan for you is not inferior — it's just yours." },
+    { text: "Love is patient, love is kind. It does not envy, it does not boast, it is not proud.", ref: "1 Corinthians 13:4 (NIV)", thought: "Envy is the opposite of love. When you catch yourself wanting what someone else has, ask God to fill that space with love instead." }
+  ],
+  loss: [
+    { text: "The Lord is close to the brokenhearted and saves those who are crushed in spirit.", ref: "Psalm 34:18 (NIV)", thought: "If you're grieving today — a person, a relationship, a season — you are not alone. God draws closer to the broken, not away from them. Let yourself be found by Him." },
+    { text: "He will wipe every tear from their eyes. There will be no more death or mourning or crying or pain.", ref: "Revelation 21:4 (NIV)", thought: "This is God's final word on loss — it doesn't win. The story ends with Him personally wiping away every tear. Grief is real, but it is not the last word." },
+    { text: "Blessed are those who mourn, for they will be comforted.", ref: "Matthew 5:4 (NIV)", thought: "Jesus blessed the grieving people, not the ones who had it all together. You don't have to hide your sadness or rush through it. Bring your mourning to Jesus today." }
+  ]
+};
+
+var HOLIDAY_VERSES = {
+  "12-25": { topic: "Christmas", text: "For to us a child is born, to us a son is given, and the government will be on his shoulders. And he will be called Wonderful Counselor, Mighty God, Everlasting Father, Prince of Peace.", ref: "Isaiah 9:6 (NIV)", thought: "Today the whole world pauses around the birth of one child. His names say it all — Wonderful, Mighty, Everlasting, Peace. Merry Christmas." },
+  "12-24": { topic: "Christmas Eve", text: "The angel said to them, 'Do not be afraid. I bring you good news that will cause great joy for all the people. Today in the town of David a Savior has been born to you; he is the Messiah, the Lord.'", ref: "Luke 2:10-11 (NIV)", thought: "The best news ever announced wasn't on a screen — it was spoken by an angel to ordinary shepherds. Tonight, receive that announcement personally: your Savior came for you." },
+  "4-20": { topic: "Resurrection", text: "He is not here; he has risen, just as he said.", ref: "Matthew 28:6 (NIV)", thought: "Seven words that changed everything. Death didn't win. The tomb is empty. Whatever feels dead in your life today — bring it to the Risen One. He specializes in resurrection." },
+  "4-18": { topic: "Good Friday", text: "But God demonstrates his own love for us in this: While we were still sinners, Christ died for us.", ref: "Romans 5:8 (NIV)", thought: "You didn't have to clean yourself up first. While you were still in the mess, Jesus went to the cross for you. That's the definition of grace." },
+  "1-1":  { topic: "New Year", text: "See, I am doing a new thing! Now it springs up; do you not perceive it? I am making a way in the wilderness and streams in the wasteland.", ref: "Isaiah 43:19 (NIV)", thought: "A brand new year is God's invitation: watch what I'm about to do. Don't let yesterday's disappointments blind you to today's possibilities. Happy New Year." },
+  "11-28":{ topic: "Thanksgiving", text: "Give thanks to the Lord, for he is good; his love endures forever.", ref: "Psalm 107:1 (NIV)", thought: "Before the food and the family and the football — start with this. His love has been enduring all year, even through the hard parts. Happy Thanksgiving." },
+  "11-27":{ topic: "Thanksgiving", text: "Give thanks in all circumstances; for this is God's will for you in Christ Jesus.", ref: "1 Thessalonians 5:18 (NIV)", thought: "Not for all circumstances — but in them. Even in the hard seasons, gratitude to God is possible. It changes how you see everything." },
+  "12-31":{ topic: "New Year's Eve", text: "The steadfast love of the Lord never ceases; his mercies never come to an end; they are new every morning; great is your faithfulness.", ref: "Lamentations 3:22-23 (NIV)", thought: "As this year closes, look back with honesty and forward with hope. God was faithful through everything. Tomorrow brings fresh mercies. He's not done yet." }
+};
+
+function seededRandom(seed) {
+  var h = 0;
+  for (var i = 0; i < seed.length; i++) { h = Math.imul(31, h) + seed.charCodeAt(i) | 0; }
+  return (h >>> 0) % 10000 / 10000;
+}
+
+function getDayData(date) {
+  var month = date.getMonth() + 1;
+  var day   = date.getDate();
+  var key   = month + '-' + day;
+  if (HOLIDAY_VERSES[key]) return HOLIDAY_VERSES[key];
+  var dateStr = date.toISOString().slice(0, 10);
+  var topics  = Object.keys(VERSES);
+  var topic   = topics[Math.floor(seededRandom(dateStr + 'topic') * topics.length)];
+  var pool    = VERSES[topic];
+  var verse   = pool[Math.floor(seededRandom(dateStr + 'verse') * pool.length)];
+  return { topic: topic.charAt(0).toUpperCase() + topic.slice(1), text: verse.text, ref: verse.ref, thought: verse.thought };
+}
+
+function formatDate(date) {
+  return date.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+}
+function formatDateShort(date) {
+  return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+}
+
+function renderToday() {
+  var today = new Date();
+  var data  = getDayData(today);
+  document.getElementById('dateStrip').innerHTML   = 'Today is <span>' + formatDate(today) + '</span>';
+  document.getElementById('todayTopic').textContent  = data.topic;
+  document.getElementById('todayVerse').textContent  = '"' + data.text + '"';
+  document.getElementById('todayRef').textContent    = '— ' + data.ref;
+  document.getElementById('todayThought').textContent = data.thought;
+  document.getElementById('todayFooter').textContent  = 'New International Version (NIV) · tablespoonofgod.com';
+  document.getElementById('footerYear').textContent   = today.getFullYear();
+  window._todayData = data;
+}
+
+function renderArchive() {
+  var grid = document.getElementById('archiveGrid');
+  grid.innerHTML = '';
+  for (var i = 1; i <= 14; i++) {
+    var d = new Date();
+    d.setDate(d.getDate() - i);
+    var data = getDayData(d);
+    var card = document.createElement('div');
+    card.className = 'archive-card';
+    card.innerHTML =
+      '<div class="archive-date">' + formatDateShort(d) + '</div>' +
+      '<span class="archive-topic">' + data.topic + '</span>' +
+      '<p class="archive-verse">"' + data.text + '"</p>' +
+      '<p class="archive-ref">— ' + data.ref + '</p>' +
+      '<button class="archive-expand" data-idx="' + i + '">+ Read today\'s thought</button>' +
+      '<div class="archive-thought" id="archiveThought-' + i + '">' + data.thought + '</div>';
+    grid.appendChild(card);
+  }
+}
+
+function toggleThought(idx) {
+  var el  = document.getElementById('archiveThought-' + idx);
+  var btn = el.previousElementSibling;
+  var open = el.style.display === 'block';
+  el.style.display = open ? 'none' : 'block';
+  btn.textContent  = open ? "+ Read today's thought" : "- Hide thought";
+}
+
+function copyVerse() {
+  var d   = window._todayData;
+  var txt = '"' + d.text + '" — ' + d.ref + '\n\nA Tablespoon of God · tablespoonofgod.com';
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(txt).then(function() { alert('Verse copied! Share it freely. 🙏'); });
+  } else {
+    prompt('Copy this text:', txt);
+  }
+}
+function shareToX() {
+  var d   = window._todayData;
+  var msg = encodeURIComponent('"' + d.text + '" — ' + d.ref + ' #tablespoonofgod #BibleVerse #Faith');
+  window.open('https://x.com/intent/tweet?text=' + msg + '&url=https://tablespoonofgod.com', '_blank');
+}
+function shareToFacebook() {
+  window.open('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent('https://tablespoonofgod.com'), '_blank');
+}
+
+// MAILCHIMP SIGNUP
+// Replace the URL below with your real Mailchimp form action URL (see DEPLOY-GUIDE)
+var MAILCHIMP_ACTION_URL = 'https://YOURSITE.us1.list-manage.com/subscribe/post?u=XXXXXXXX&id=YYYYYYYY';
+
+function handleSignup(e) {
+  e.preventDefault();
+  var name  = document.getElementById('signupName').value.trim();
+  var email = document.getElementById('signupEmail').value.trim();
+  if (!name || !email) return;
+  var btn = e.target.querySelector('button[type="submit"]');
+  btn.textContent = 'Subscribing…';
+  btn.disabled = true;
+  var parts = name.split(' ');
+  var fname = parts[0] || '';
+  var lname = parts.slice(1).join(' ') || '';
+  var iframe = document.createElement('iframe');
+  iframe.name = 'mc_' + Date.now();
+  iframe.style.display = 'none';
+  document.body.appendChild(iframe);
+  var form = document.createElement('form');
+  form.method = 'POST';
+  form.action = MAILCHIMP_ACTION_URL;
+  form.target = iframe.name;
+  form.style.display = 'none';
+  var fields = [['EMAIL', email], ['FNAME', fname], ['LNAME', lname], ['b_', '']];
+  for (var f = 0; f < fields.length; f++) {
+    var inp = document.createElement('input');
+    inp.type = 'hidden'; inp.name = fields[f][0]; inp.value = fields[f][1];
+    form.appendChild(inp);
+  }
+  document.body.appendChild(form);
+  form.submit();
+  setTimeout(function() {
+    document.querySelector('.signup-form').style.display = 'none';
+    var confirmEl = document.getElementById('signupConfirm');
+    confirmEl.textContent = '🙏 Thank you, ' + fname + '! You\'re on the list. May every morning bring you a fresh word from God.';
+    confirmEl.style.display = 'block';
+    document.body.removeChild(form);
+    document.body.removeChild(iframe);
+  }, 1800);
+}
+
+try { renderToday(); } catch(e) { console.error('renderToday failed:', e); }
+try { renderArchive(); } catch(e) { console.error('renderArchive failed:', e); }
+
+// Robust in-page navigation.
+// The href="#section" anchors work locally in most browsers, but some hosted
+// environments, CMS wrappers, or redirect rules can interfere with hash navigation.
+// This handler scrolls directly to the matching section and then updates the URL hash.
+document.querySelectorAll('nav a[data-target]').forEach(function(link) {
+  link.addEventListener('click', function(e) {
+    var targetId = link.getAttribute('data-target');
+    var target = document.getElementById(targetId);
+
+    if (!target) return; // keep normal anchor behavior if the target is missing
+
+    e.preventDefault();
+    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+    if (history && history.pushState) {
+      history.pushState(null, '', '#' + targetId);
+    } else {
+      window.location.hash = targetId;
+    }
+  });
+});
+
+document.getElementById('shareCopy').addEventListener('click', copyVerse);
+document.getElementById('shareX').addEventListener('click', shareToX);
+document.getElementById('shareFacebook').addEventListener('click', shareToFacebook);
+
+document.getElementById('archiveGrid').addEventListener('click', function(e) {
+  var btn = e.target.closest('.archive-expand');
+  if (btn) toggleThought(btn.getAttribute('data-idx'));
+});
+
+// Refresh at midnight
+var now = new Date();
+var msToMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1) - now;
+setTimeout(function() { location.reload(); }, msToMidnight);
+</script>
+</body>
+</html>
